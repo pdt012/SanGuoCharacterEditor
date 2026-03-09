@@ -1,0 +1,350 @@
+﻿<rxui:ReactiveWindow
+    x:Class="SanGuoCharacterEditor.Dialogs.CharacterEditDialog"
+    x:TypeArguments="vm:CharacterEditViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:rxui="http://reactiveui.net"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:SanGuoCharacterEditor.Dialogs"
+    xmlns:enum="clr-namespace:SanGuoCharacterEditor.Core.Enums"
+    xmlns:hhctrl="clr-namespace:pkHHControlShared.Controls;assembly=pkHHControlShared"
+    xmlns:face="clr-namespace:San11FaceEditorShared.Views;assembly=San11FaceEditorShared"
+    xmlns:conv="clr-namespace:SanGuoCharacterEditor.Converters"
+    xmlns:ex="clr-namespace:SanGuoCharacterEditor.Extensions"
+    xmlns:m="clr-namespace:SanGuoCharacterEditor.Core.Models"
+    xmlns:vm="clr-namespace:SanGuoCharacterEditor.ViewModels"
+    xmlns:enums="clr-namespace:SanGuoCharacterEditor.Core.Enums"
+    mc:Ignorable="d"
+    x:Name="dialog"
+    d:DataContext="{d:DesignInstance Type=vm:CharacterEditViewModel}"
+    Title="编辑人物" Height="450" Width="600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/EditStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <conv:Enum2NumberConverter x:Key="Enum2NumberConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <hhctrl:DialogContainer Padding="5" OnCommit="Commit" OnCancel="Cancel">
+        <DockPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <TextBlock Text="UID" Style="{StaticResource TextBlock.Label2}"/>
+                <TextBox Text="{Binding CharacterVM.Id, Mode=OneWay}" IsReadOnly="True" BorderThickness="0,0,0,1" Width="200"/>
+                <TextBlock Text="姓名" Style="{StaticResource TextBlock.Label2}"/>
+                <TextBox Text="{Binding CharacterVM.Name, Mode=OneWay}" IsReadOnly="True" BorderThickness="0,0,0,1" Width="80"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <TextBlock Text="包名" Style="{StaticResource TextBlock.Label2}"/>
+                <TextBox Text="{Binding CharacterVM.Data.PackageName}" Width="60"/>
+                <TextBlock Text="字符ID" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding CharacterVM.Data.StringId}" Width="160"/>
+                <TextBlock Text="类型" Style="{StaticResource TextBlock.Label2}"/>
+                <ComboBox SelectedValue="{Binding CharacterVM.Data.Type}" Width="120" ItemsSource="{ex:EnumBindingSource {x:Type enums:CharacterType}}"/>
+            </StackPanel>
+            <TabControl>
+                <TabItem Header="基础信息" DataContext="{Binding CharacterVM.Data}">
+                    <StackPanel Margin="3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="姓" Style="{StaticResource TextBlock.Label2}"/>
+                            <TextBox Text="{Binding FamilyName}" Width="60"/>
+                            <TextBlock Text="名" Style="{StaticResource TextBlock.Label2}"/>
+                            <TextBox Text="{Binding GivenName}" Width="60"/>
+                            <TextBlock Text="字" Style="{StaticResource TextBlock.Label2}"/>
+                            <TextBox Text="{Binding CourtecyName}" Width="60"/>
+                            <TextBlock Text="称号" Style="{StaticResource TextBlock.Label2}"/>
+                            <TextBox Width="100"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="性别" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding Gender}" Width="60" ItemsSource="{ex:EnumBindingSource {x:Type enums:Gender}}"/>
+                            <TextBlock Text="出生地" Style="{StaticResource TextBlock.Label2}"/>
+                            <TextBox Text="{Binding BirthPlace}" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="出生年" Style="{StaticResource TextBlock.Label2}"/>
+                            <hc:NumericUpDown Value="{Binding BirthYear}" Width="80" Minimum="100" Maximum="400"/>
+                            <TextBlock Text="登场年" Style="{StaticResource TextBlock.Label2}"/>
+                            <hc:NumericUpDown Value="{Binding AppearYear}" Width="80" Minimum="100" Maximum="400"/>
+                            <TextBlock Text="死亡年" Style="{StaticResource TextBlock.Label2}"/>
+                            <hc:NumericUpDown Value="{Binding DeathYear}" Width="80" Minimum="100" Maximum="400"/>
+                            <TextBlock Text="死因" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding CauseOfDeath}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:CauseOfDeath}}"/>
+                        </StackPanel>
+                        <Separator Margin="6,3"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="性格" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding Character}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:Character}}"/>
+                            <TextBlock Text="声音" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding Voice}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:Voice}}"/>
+                            <TextBlock Text="语气" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding Tone}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:Tone}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="义理" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding LoyalMind}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:LoyalMind}}"/>
+                            <TextBlock Text="野心" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding Ambition}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:Ambition}}"/>
+                            <TextBlock Text="汉室态度" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding AttitudeToHan}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:AttitudeToHan}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="起用" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding PersonnelPolicy}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:PersonnelPolicy}}"/>
+                            <TextBlock Text="战略倾向" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding StrategicTendency}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:StrategicTendency}}"/>
+                            <TextBlock Text="地域执着" Style="{StaticResource TextBlock.Label2}"/>
+                            <ComboBox SelectedValue="{Binding LocalAffiliation}" Width="100" ItemsSource="{ex:EnumBindingSource {x:Type enums:LocalAffiliation}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="能力信息" DataContext="{Binding CharacterVM.Data}" Height="28" VerticalAlignment="Top">
+                    <StackPanel Margin="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <hc:NumericUpDown
+                                Grid.Row="0" Grid.Column="0"
+                                hc:TitleElement.Title="统率" Value="{Binding Stats.Leadership}" Style="{StaticResource StatEntry}"/>
+                            <hc:NumericUpDown
+                                Grid.Row="1" Grid.Column="0"
+                                hc:TitleElement.Title="武力" Value="{Binding Stats.Strength}" Style="{StaticResource StatEntry}"/>
+                            <hc:NumericUpDown
+                                Grid.Row="2" Grid.Column="0"
+                                hc:TitleElement.Title="智力" Value="{Binding Stats.Intelligence}" Style="{StaticResource StatEntry}"/>
+                            <hc:NumericUpDown
+                                Grid.Row="3" Grid.Column="0"
+                                hc:TitleElement.Title="政治" Value="{Binding Stats.Politics}" Style="{StaticResource StatEntry}"/>
+                            <hc:NumericUpDown
+                                Grid.Row="4" Grid.Column="0"
+                                hc:TitleElement.Title="魅力" Value="{Binding Stats.Charm}" Style="{StaticResource StatEntry}"/>
+
+                            <hc:ComboBox
+                                Grid.Row="0" Grid.Column="1"
+                                hc:TitleElement.Title="统率成长" SelectedValue="{Binding StatAgings.Leadership}" Style="{StaticResource StatAgingEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="1" Grid.Column="1"
+                                hc:TitleElement.Title="武力成长" SelectedValue="{Binding StatAgings.Strength}" Style="{StaticResource StatAgingEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="2" Grid.Column="1"
+                                hc:TitleElement.Title="智力成长" SelectedValue="{Binding StatAgings.Intelligence}" Style="{StaticResource StatAgingEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="3" Grid.Column="1"
+                                hc:TitleElement.Title="政治成长" SelectedValue="{Binding StatAgings.Politics}" Style="{StaticResource StatAgingEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="4" Grid.Column="1"
+                                hc:TitleElement.Title="魅力成长" SelectedValue="{Binding StatAgings.Charm}" Style="{StaticResource StatAgingEntry}"/>
+
+                            <hc:Divider
+                                Grid.Row="0" Grid.Column="2" Grid.RowSpan="5"
+                                Orientation="Vertical" LineStrokeThickness="1" Margin="6,6"/>
+
+                            <hc:ComboBox
+                                Grid.Row="0" Grid.Column="3"
+                                hc:TitleElement.Title="枪兵" SelectedIndex="{Binding Proficiency.Spearmen}" Style="{StaticResource ArmyLevelEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="0" Grid.Column="4"
+                                hc:TitleElement.Title="戟兵" SelectedIndex="{Binding Proficiency.Halberdiers}" Style="{StaticResource ArmyLevelEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="1" Grid.Column="3"
+                                hc:TitleElement.Title="弩兵" SelectedIndex="{Binding Proficiency.Crossbowmen}" Style="{StaticResource ArmyLevelEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="1" Grid.Column="4"
+                                hc:TitleElement.Title="骑兵" SelectedIndex="{Binding Proficiency.Cavalry}" Style="{StaticResource ArmyLevelEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="2" Grid.Column="3"
+                                hc:TitleElement.Title="水兵" SelectedIndex="{Binding Proficiency.Navy}" Style="{StaticResource ArmyLevelEntry}"/>
+                            <hc:ComboBox
+                                Grid.Row="2" Grid.Column="4"
+                                hc:TitleElement.Title="攻城" SelectedIndex="{Binding Proficiency.SiegeUnits}" Style="{StaticResource ArmyLevelEntry}"/>
+                        </Grid>
+                        <Separator Margin="6,3"/>
+
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Left" Text="特技" Style="{StaticResource TextBlock.Label2}"/>
+                            <Button DockPanel.Dock="Right" Content="编辑" Style="{StaticResource ButtonDefault.Small}" HorizontalAlignment="Left" Margin="3,0"
+                                    Click="ButtonEditSkills_Click"/>
+                            <ListBox ItemsSource="{Binding Skills}"
+                                     Height="24" Margin="3">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                        </DockPanel>
+                        <Separator Margin="6,3"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="擅长话题" Style="{StaticResource TextBlock.Label2}" Margin="6,3,12,3"/>
+                            <ComboBox SelectedValue="{Binding ArgueTopic}" Width="80" ItemsSource="{ex:EnumBindingSource {x:Type enums:ArgueTopic}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="舌战技能" Style="{StaticResource TextBlock.Label2}" Margin="6,3,12,3"/>
+                            <CheckBox Content="愤怒" IsChecked="{Binding ArgueSkills.Fury}"/>
+                            <CheckBox Content="镇静" IsChecked="{Binding ArgueSkills.Calm}"/>
+                            <CheckBox Content="无视" IsChecked="{Binding ArgueSkills.Ignore}"/>
+                            <CheckBox Content="诡辩" IsChecked="{Binding ArgueSkills.Trickery}"/>
+                            <CheckBox Content="大喝" IsChecked="{Binding ArgueSkills.Shout}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="人际关系" DataContext="{Binding CharacterVM}">
+                    <StackPanel Margin="3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="相性" Style="{StaticResource TextBlock.Label2}"/>
+                            <hc:NumericUpDown Value="{Binding Data.AffinityId}" Width="60" Minimum="0" Maximum="149"/>
+                            <TextBlock Text="预定君主" Style="{StaticResource TextBlock.Label2}"/>
+                            <hhctrl:SearchableComboBox x:Name="comboKing" Width="180" hc:InfoElement.ShowClearButton="True"
+                                                       SelectedItem="{Binding ReservedKing}" ItemsSource="{Binding AllCharacters}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="祖先" Style="{StaticResource TextBlock.Label2}"/>
+                            <hhctrl:SearchableComboBox x:Name="comboAncestry" Width="180" hc:InfoElement.ShowClearButton="True"
+                                                       SelectedItem="{Binding Ancestry}" ItemsSource="{Binding AllCharacters}"/>
+                            <TextBlock Text="世代" Style="{StaticResource TextBlock.Label2}"/>
+                            <hc:NumericUpDown Value="{Binding Data.Generation}" x:Name="decimalGeneration" Width="40"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="父亲" Style="{StaticResource TextBlock.Label2}"/>
+                            <hhctrl:SearchableComboBox x:Name="comboFather" Width="180" hc:InfoElement.ShowClearButton="True"
+                                                       SelectedItem="{Binding Father}" ItemsSource="{Binding AllCharacters}"/>
+                            <TextBlock Text="母亲" Style="{StaticResource TextBlock.Label2}"/>
+                            <hhctrl:SearchableComboBox x:Name="comboMother" Width="180" hc:InfoElement.ShowClearButton="True"
+                                                       SelectedItem="{Binding Mother}" ItemsSource="{Binding AllCharacters}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="配偶" Style="{StaticResource TextBlock.Label2}"/>
+                            <hhctrl:SearchableComboBox x:Name="comboSpouse" Width="180" hc:InfoElement.ShowClearButton="True"
+                                                       SelectedItem="{Binding Spouse}" ItemsSource="{Binding AllCharacters}"/>
+                            <TextBlock Text="义兄" Style="{StaticResource TextBlock.Label2}"/>
+                            <hhctrl:SearchableComboBox x:Name="comboBrother" Width="180" hc:InfoElement.ShowClearButton="True"
+                                                       SelectedItem="{Binding Brother}" ItemsSource="{Binding AllCharacters}"/>
+                        </StackPanel>
+
+                        <Grid HorizontalAlignment="Left">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="120"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="喜爱武将" Style="{StaticResource TextBlock.Label2}" HorizontalAlignment="Left"/>
+                            <Button Grid.Column="1" Content="编辑"  Style="{StaticResource ButtonDefault.Small}" HorizontalAlignment="Left" Margin="3,0"
+                                    Click="ButtonEditLike_Click"/>
+                            <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                     Width="200" Margin="3"
+                                     ItemsSource="{Binding LikedPeople}" DisplayMemberPath="IdName"/>
+                            <TextBlock Grid.Column="2" Text="厌恶武将" Style="{StaticResource TextBlock.Label2}" HorizontalAlignment="Left"/>
+                            <Button Grid.Column="3" Content="编辑" Style="{StaticResource ButtonDefault.Small}" HorizontalAlignment="Left" Margin="3,0"
+                                    Click="ButtonEditDislike_Click"/>
+                            <ListBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                     Width="200" Margin="3"
+                                     ItemsSource="{Binding DislikedPeople}" DisplayMemberPath="IdName"/>
+                        </Grid>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="头像">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <face:FaceImagesPanel x:Name="faceImagePanel" HorizontalAlignment="Left"
+                                              IsSelectionAlwaysEnabled="True"
+                                              DataContext="{Binding FaceImagesPanelVM}"/>
+                        <StackPanel>
+                            <Border BorderThickness="1" BorderBrush="{DynamicResource SecondaryBorderBrush}"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3"
+                                    MouseDown="cutin_MouseDown" Background="Transparent" Cursor="Hand">
+                                <Image x:Name="cutin" Height="128" Width="128"
+                                       Source="{Binding CutinImage}"/>
+                            </Border>
+                            <Button Content="取消暴击图" Style="{StaticResource ButtonDefault}" HorizontalAlignment="Center" Margin="3"
+                                    Click="BtnDeleteCutin_Click" IsEnabled="{Binding Source, ElementName=cutin, Converter={StaticResource Object2BooleanConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="模型" DataContext="{Binding CharacterVM.Data.Model}">
+                    <hc:UniformSpacingPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="3"
+                                            ChildWrapping="Wrap" Width="400">
+                        <hc:ComboBox
+                            hc:TitleElement.Title="骨架" Style="{StaticResource ModelComboBox}"
+                            ItemsSource="{ex:EnumBindingSource {x:Type enum:ModelSkeleton}}"
+                            SelectedValue="{Binding Skeleton, Converter={StaticResource Enum2NumberConverter}, ConverterParameter={x:Type enum:ModelSkeleton}}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="头部" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Head}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="面部" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Face}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="身体" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Body}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="披风" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Cloak}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="手腕" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Arms}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="腿部" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Legs}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="箭袋" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Quiver}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="其他" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Other}"/>
+                        <!--
+                        <hc:ComboBox
+                            hc:TitleElement.Title="其他" Style="{StaticResource ModelComboBox}"
+                            ItemsSource="{ex:EnumBindingSource {x:Type enum:ModelOther}}"
+                            SelectedItem="{Binding Other, Converter={StaticResource Enum2NumberConverter}, ConverterParameter={x:Type enum:ModelOther}}"/>
+                        -->
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="左手" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding LeftHand}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="右手" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding RightHand}"/>
+                        <hc:NumericUpDown
+                            hc:TitleElement.Title="坐骑" Style="{StaticResource ModelNumeric}"
+                            Value="{Binding Mount}"/>
+                    </hc:UniformSpacingPanel>
+                </TabItem>
+
+                <TabItem Header="列传">
+                    <TextBox Text="{Binding CharacterVM.Data.Biography}" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
+                             Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Top"/>
+                </TabItem>
+            </TabControl>
+
+        </DockPanel>
+    </hhctrl:DialogContainer>
+</rxui:ReactiveWindow>

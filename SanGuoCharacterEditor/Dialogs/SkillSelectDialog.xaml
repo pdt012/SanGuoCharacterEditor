@@ -1,0 +1,79 @@
+﻿<Window x:Class="SanGuoCharacterEditor.Dialogs.SkillSelectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol" 
+        xmlns:local="clr-namespace:SanGuoCharacterEditor.Dialogs"
+        xmlns:ctrl="clr-namespace:pkHHControlShared.Controls;assembly=pkHHControlShared"
+        mc:Ignorable="d"
+        Title="特技选择" Height="300" Width="300">
+    <ctrl:DialogContainer Padding="10" OnCommit="OnCommit" OnCancel="OnCancel">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <Style x:Key="{x:Type Label}" TargetType="Label" BasedOn="{StaticResource LabelDefault.Small}">
+                        <Setter Property="Margin" Value="3,3,3,5"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="AllowDrop" Value="True"/>
+                        <Setter Property="Focusable" Value="True"/>
+                        <Setter Property="IsTabStop" Value="True"/>
+                    </Style>
+                </ResourceDictionary>
+            </Grid.Resources>
+
+            <TextBlock Text="特技1" Grid.Row="0" Margin="8,3"/>
+            <Label x:Name="SkillBox1" Grid.Row="1"
+                   DragEnter="SkillBox_DragEnter" Drop="SkillBox_Drop"
+                   PreviewMouseMove="SkillBox_PreviewMouseMove"/>
+
+            <TextBlock Text="特技2" Grid.Row="2" Margin="8,3"/>
+            <Label x:Name="SkillBox2" Grid.Row="3"
+                   DragEnter="SkillBox_DragEnter" Drop="SkillBox_Drop"
+                   PreviewMouseMove="SkillBox_PreviewMouseMove"/>
+            
+            <TextBlock Text="特技3" Grid.Row="4" Margin="8,3"/>
+            <Label x:Name="SkillBox3" Grid.Row="5"
+                   DragEnter="SkillBox_DragEnter" Drop="SkillBox_Drop"
+                   PreviewMouseMove="SkillBox_PreviewMouseMove"/>
+
+            <TextBlock Text="*拖放设置/取消特技"
+                       Grid.Row="6"
+                       Foreground="{DynamicResource AccentTextBrush}"
+                       Margin="8,3"/>
+
+            <DockPanel Grid.Column="1" Grid.RowSpan="7">
+                <hc:SearchBar x:Name="searchBar"
+                              DockPanel.Dock="Top"
+                              Style="{StaticResource SearchBarPlus.Small}"
+                              hc:InfoElement.Placeholder="搜索..."
+                              hc:InfoElement.ShowClearButton="True"
+                              Margin="3"
+                              IsRealTime="True"
+                              SearchStarted="SearchBar_SearchStarted"/>
+                <ListBox x:Name="SkillListBox"
+                         ItemsSource="{Binding Choices}"
+                         Style="{StaticResource ListBox.Tight}" Margin="3"
+                         AllowDrop="True"
+                         PreviewMouseMove="SkillListBox_PreviewMouseMove"
+                         DragEnter="SkillBox_DragEnter" Drop="SkillListBox_Drop"
+                         MouseDoubleClick="SkillListBox_MouseDoubleClick"/>
+            </DockPanel>
+        </Grid>
+    </ctrl:DialogContainer>
+</Window>

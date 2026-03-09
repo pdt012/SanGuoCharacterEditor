@@ -1,0 +1,106 @@
+﻿<rxui:ReactiveUserControl
+    x:Class="SanGuoCharacterEditor.Views.MainView"
+    x:TypeArguments="vm:MainViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:rxui="http://reactiveui.net" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:SanGuoCharacterEditor.Views"
+    mc:Ignorable="d" 
+    xmlns:m="clr-namespace:SanGuoCharacterEditor.Core.Models"
+    xmlns:vm="clr-namespace:SanGuoCharacterEditor.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="文件" Padding="10,1">
+                <MenuItem Header="设置mediaEX路径" Click="MenuSetMediaExPath_Click"
+                          ToolTip="{Binding Config.Value.MediaExPath}"/>
+                <MenuItem Header="导入码表" Click="MenuLoadCodeTable_Click"
+                          ToolTip="{Binding Config.Value.CodeTablePath}"/>
+                <MenuItem Header="导入全局配置" Click="MenuLoadGlobalScenario_Click"
+                          ToolTip="{Binding Config.Value.GlobalScenarioPath}"/>
+                <MenuItem Header="导入特技id对照表" Click="MenuLoadSkillNames_Click"
+                          ToolTip="{Binding Config.Value.SkillNamesPath}"/>
+                <Separator/>
+                <MenuItem Header="导入剧本武将" Click="MenuLoadSenario_Click"/>
+                <MenuItem Header="导入创作档武将" Click="MenuLoadMakeData_Click"/>
+                <Separator/>
+                <MenuItem Header="加载配置" Click="MenuLoadData_Click"/>
+                <MenuItem Header="保存配置" Click="MenuSaveData_Click"/>
+                <Separator/>
+                <MenuItem Header="从Excel导入" Click="MenuImportExcel_Click"/>
+                <MenuItem Header="导出到Excel" Click="MenuExportExcel_Click"/>
+                <Separator/>
+                <MenuItem Header="导出到扩展武将档"/>
+            </MenuItem>
+            <MenuItem Header="统计" Padding="10,1">
+                <MenuItem Header="统计" Click="MenuStatistics_Click"/>
+                <Separator/>
+            </MenuItem>
+        </Menu>
+
+        <DataGrid
+            ItemsSource="{Binding Characters}"
+            x:Name="datatable" Grid.Row="1"
+            MouseDoubleClick="datatable_MouseDoubleClick"
+            EnableRowVirtualization="True"
+            IsReadOnly="True"
+            SelectionMode="Extended" FrozenColumnCount="2"
+            SelectedItem="{Binding SelectedItem}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Data.Id}" Width="Auto" />
+                <DataGridTextColumn Header="类型" Binding="{Binding Data.Type}" Width="Auto" />
+                <DataGridTextColumn Header="姓名" Binding="{Binding Name}" Width="Auto" />
+                <DataGridTextColumn Header="字" Binding="{Binding Data.CourtecyName}" Width="Auto" />
+                <DataGridTextColumn Header="性别" Binding="{Binding Data.Gender}" Width="Auto" />
+                <DataGridTextColumn Header="五维和" Binding="{Binding StatSum}" Width="Auto" />
+                <DataGridTextColumn Header="适性和" Binding="{Binding ProficiencySum}" Width="Auto" />
+                <DataGridTextColumn Header="出生地" Binding="{Binding Data.BirthPlace}" Width="Auto" />
+                <DataGridTextColumn Header="出生年" Binding="{Binding Data.BirthYear}" Width="Auto" />
+                <DataGridTextColumn Header="预定君主" Binding="{Binding ReservedKing.Name}" Width="Auto" />
+            </DataGrid.Columns>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Header="编辑"
+                        Command="{Binding EditCommand}"
+                        CommandParameter="{Binding PlacementTarget.SelectedItem,
+                        RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+
+                    <MenuItem
+                        Header="删除"
+                        Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding PlacementTarget.SelectedItems,
+                        RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+
+                    <MenuItem
+                        Header="新建"
+                        Command="{Binding AddCommand}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle.Small}">
+                    <Style.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True"/>
+                                <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="#80BFFF"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+    </Grid>
+</rxui:ReactiveUserControl>
