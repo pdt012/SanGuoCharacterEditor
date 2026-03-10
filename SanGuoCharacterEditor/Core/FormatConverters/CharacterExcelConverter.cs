@@ -1,15 +1,18 @@
-﻿using MiniExcelLibs;
+﻿using DocumentFormat.OpenXml.Packaging;
+using MiniExcelLibs;
 using SanGuoCharacterEditor.Core.Enums;
 using SanGuoCharacterEditor.Core.Models;
+using SanGuoCharacterEditor.Utils;
 using System.Collections.Immutable;
 
 namespace SanGuoCharacterEditor.Core.FormatConverters
 {
     internal static class CharacterExcelConverter
     {
-        public static void ToExcel(string excelPath, IEnumerable<SanGuoCharacter> characters)
+        public static void ToExcel(string excelPath, IEnumerable<SanGuoCharacter> characters, string sheetName = "人物")
         {
             MiniExcel.SaveAs(excelPath, YieldExcelData(characters), sheetName: "人物", overwriteFile: true);
+            CreateValidation(excelPath);
         }
 
         private static IEnumerable<Dictionary<string, object>> YieldExcelData(IEnumerable<SanGuoCharacter> characters)
@@ -109,6 +112,53 @@ namespace SanGuoCharacterEditor.Core.FormatConverters
 
                 yield return row;
             }
+        }
+
+        private static void CreateValidation(string filename)
+        {
+            using var doc = SpreadsheetDocument.Open(filename, true);
+
+            ExcelDataValidationHelper.CreateEnumSheet(doc,
+                new Dictionary<string, string[]>
+            {
+                { "性别", Enum.GetNames<Gender>() },
+                { "人物类型", Enum.GetNames<CharacterType>() },
+                { "死因", Enum.GetNames<CauseOfDeath>() },
+                { "成长", Enum.GetNames<StatAging>() },
+                { "舌战话题", Enum.GetNames<ArgueTopic>() },
+                { "义理", Enum.GetNames<LoyalMind>() },
+                { "野心", Enum.GetNames<Ambition>() },
+                { "用人", Enum.GetNames<PersonnelPolicy>() },
+                { "性格", Enum.GetNames<Character>() },
+                { "声音", Enum.GetNames<Voice>() },
+                { "语气", Enum.GetNames<Tone>() },
+                { "汉室态度", Enum.GetNames<AttitudeToHan>() },
+                { "战略倾向", Enum.GetNames<StrategicTendency>() },
+                { "地域执着", Enum.GetNames<LocalAffiliation>() }
+            });
+
+            ExcelDataValidationHelper.ApplyEnumValidations(doc, "人物",
+                ("性别", "性别"),
+                ("类型", "人物类型"),
+                ("死因", "死因"),
+                ("统率成长", "成长"),
+                ("武力成长", "成长"),
+                ("智力成长", "成长"),
+                ("政治成长", "成长"),
+                ("魅力成长", "成长"),
+                ("舌战话题", "舌战话题"),
+                ("义理", "义理"),
+                ("野心", "野心"),
+                ("用人", "用人"),
+                ("性格", "性格"),
+                ("声音", "声音"),
+                ("语气", "语气"),
+                ("汉室态度", "汉室态度"),
+                ("战略倾向", "战略倾向"),
+                ("地域执着", "地域执着")
+            );
+
+            doc.WorkbookPart.Workbook.Save();
         }
 
         public static IEnumerable<SanGuoCharacter> FromExcel(string excelPath)
