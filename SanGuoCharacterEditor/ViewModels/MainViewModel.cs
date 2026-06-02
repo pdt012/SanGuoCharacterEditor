@@ -4,7 +4,7 @@ using ReactiveUI.SourceGenerators;
 using San11FaceEditorShared.Common;
 using San11FaceEditorShared.ViewModels;
 using SanGuoCharacterEditor.Core.CodeConverters;
-using SanGuoCharacterEditor.Core.FormatConverters;
+using SanGuoCharacterEditor.Core.IOHelpers;
 using SanGuoCharacterEditor.Core.Mapper;
 using SanGuoCharacterEditor.Core.Models;
 using SanGuoCharacterEditor.Services;
@@ -61,7 +61,7 @@ namespace SanGuoCharacterEditor.ViewModels
 
 #if DEBUG
             // 自动加载剧本数据
-            List<SanGuoCharacter> characters = CharacterPK22ScenConverter.FromPK22Scenario(Config.Value.LastSenarioPath);
+            List<SanGuoCharacter> characters = CharacterPK22ScenHelper.FromPK22Scenario(Config.Value.LastSenarioPath);
             foreach (SanGuoCharacter character in characters)
             {
                 AddOrUpdateCharacter(character);
@@ -131,7 +131,7 @@ namespace SanGuoCharacterEditor.ViewModels
             if (!CheckAppData()) return;
             string? openFileName = FileDialogUtil.OpenFile("选择剧本文件", "s11剧本文件|*.s11", Config.Value.LastSenarioPath, "LoadSaveSenario");
             if (openFileName == null) return;
-            List<SanGuoCharacter> characters = CharacterPK22ScenConverter.FromPK22Scenario(openFileName);
+            List<SanGuoCharacter> characters = CharacterPK22ScenHelper.FromPK22Scenario(openFileName);
             foreach (SanGuoCharacter character in characters)
             {
                 AddOrUpdateCharacter(character);
@@ -145,7 +145,7 @@ namespace SanGuoCharacterEditor.ViewModels
             if (!CheckAppData()) return;
             string? openFileName = FileDialogUtil.OpenFile("选择创作档文件", "s11创作档文件|MakeData.s11", Config.Value.LastMakeDataPath, "LoadMakeData");
             if (openFileName == null) return;
-            List<SanGuoCharacter> characters = CharacterPK22ScenConverter.FromPK22MakeData(openFileName);
+            List<SanGuoCharacter> characters = CharacterPK22ScenHelper.FromPK22MakeData(openFileName);
             foreach (SanGuoCharacter character in characters)
             {
                 AddOrUpdateCharacter(character);
@@ -161,7 +161,7 @@ namespace SanGuoCharacterEditor.ViewModels
             if (openFileName == null) return;
             try
             {
-                List<SanGuoCharacter> characters = CharacterJsonConverter.FromJson(openFileName);
+                List<SanGuoCharacter> characters = CharacterJsonHelper.FromJson(openFileName);
                 int count = 0;
                 foreach (SanGuoCharacter character in characters)
                 {
@@ -183,7 +183,7 @@ namespace SanGuoCharacterEditor.ViewModels
             if (saveFileName == null) return;
             try
             {
-                CharacterJsonConverter.ToJson(saveFileName, GetAllCharacterModels());
+                CharacterJsonHelper.ToJson(saveFileName, GetAllCharacterModels());
                 Config.Update(x => x with { LastJsonDataPath = saveFileName });
                 MessageBoxUtil.Success($"成功保存 {GetAllCharacterModels().Count} 条数据");
             }
@@ -200,7 +200,7 @@ namespace SanGuoCharacterEditor.ViewModels
             if (openFileName == null) return;
             try
             {
-                IEnumerable<SanGuoCharacter> characters = CharacterExcelConverter.FromExcel(openFileName);
+                IEnumerable<SanGuoCharacter> characters = CharacterExcelHelper.FromExcel(openFileName);
                 int count = 0;
                 foreach (SanGuoCharacter character in characters)
                 {
@@ -222,7 +222,7 @@ namespace SanGuoCharacterEditor.ViewModels
             if (saveFileName == null) return;
             try
             {
-                CharacterExcelConverter.ToExcel(saveFileName, GetAllCharacterModels());
+                CharacterExcelHelper.ToExcel(saveFileName, GetAllCharacterModels());
                 Config.Update(x => x with { LastExcelDataPath = saveFileName });
                 MessageBoxUtil.Success($"成功导出 {GetAllCharacterModels().Count} 条数据");
             }

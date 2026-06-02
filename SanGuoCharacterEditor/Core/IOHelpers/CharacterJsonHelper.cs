@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text.Json;
 
-namespace SanGuoCharacterEditor.Core.FormatConverters
+namespace SanGuoCharacterEditor.Core.IOHelpers
 {
-    public class CharacterJsonConverter
+    public class CharacterJsonHelper
     {
         public static void ToJson(string jsonPath, List<SanGuoCharacter> character)
         {

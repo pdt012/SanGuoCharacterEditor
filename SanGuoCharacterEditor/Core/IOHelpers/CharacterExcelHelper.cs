@@ -5,9 +5,9 @@ using SanGuoCharacterEditor.Core.Models;
 using SanGuoCharacterEditor.Utils;
 using System.Collections.Immutable;
 
-namespace SanGuoCharacterEditor.Core.FormatConverters
+namespace SanGuoCharacterEditor.Core.IOHelpers
 {
-    internal static class CharacterExcelConverter
+    internal static class CharacterExcelHelper
     {
         public static void ToExcel(string excelPath, IEnumerable<SanGuoCharacter> characters, string sheetName = "人物")
         {

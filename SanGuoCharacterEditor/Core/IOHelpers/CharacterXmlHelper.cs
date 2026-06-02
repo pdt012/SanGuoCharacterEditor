@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SanGuoCharacterEditor.Core.FormatConverters
+namespace SanGuoCharacterEditor.Core.IOHelpers
 {
-    public static class CharacterXmlConverter
+    public static class CharacterXmlHelper
     {
         public static void ToXml(string xmlPath, List<SanGuoCharacter> characters)
         {

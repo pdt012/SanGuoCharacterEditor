@@ -5,9 +5,9 @@ using SanGuoCharacterEditor.Core.Structs;
 using System.Collections.Immutable;
 using System.IO;
 
-namespace SanGuoCharacterEditor.Core.FormatConverters
+namespace SanGuoCharacterEditor.Core.IOHelpers
 {
-    public static class CharacterPK22ScenConverter
+    public static class CharacterPK22ScenHelper
     {
         public static void ToPK22Scenario(string scenarioPath, List<SanGuoCharacter> characters)
         {
