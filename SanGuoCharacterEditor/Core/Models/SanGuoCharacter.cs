@@ -42,6 +42,7 @@ namespace SanGuoCharacterEditor.Core.Models
         [Reactive] private string _motherId = "";
         [Reactive] private string _spouseId = "";
         [Reactive] private string _brotherId = "";
+        [Reactive] private string _brother2Id = "";
         [Reactive] private byte _affinityId;
 
         [Reactive] private ImmutableArray<string> _likedPersonIdArray = [];

@@ -112,6 +112,11 @@ namespace SanGuoCharacterEditor.Views
             ViewModel.ExportExcel();
         }
 
+        private async void MenuSaveExPersonData_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.SaveExPersonData();
+        }
+
         private void MenuStatistics_Click(object sender, RoutedEventArgs e)
         {
             StatisticsDialog statisticsDialog = new(ViewModel.GetAllCharacterModels())

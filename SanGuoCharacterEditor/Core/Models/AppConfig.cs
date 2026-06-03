@@ -8,6 +8,7 @@
         string LastSenarioPath = "data/SCEN007.s11",
         string LastMakeDataPath = "",
         string LastJsonDataPath = "data/characters.json",
-        string LastExcelDataPath = "data/characters.json"
+        string LastExcelDataPath = "data/characters.xlsx",
+        string LastExPersonDataPath = "data/ExPersonData.s11"
         );
 }

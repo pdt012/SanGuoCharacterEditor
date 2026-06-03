@@ -232,6 +232,22 @@ namespace SanGuoCharacterEditor.ViewModels
             }
         }
 
+        public async Task SaveExPersonData()
+        {
+            string? saveFileName = FileDialogUtil.SaveFile("选择导出的扩展武将档文件", "s11文件|*.s11", Config.Value.LastExPersonDataPath, "ImportExcel");
+            if (saveFileName == null) return;
+            try
+            {
+                CharacterExPersonDataHelper.ToExPersonData(saveFileName, GetAllCharacterModels());
+                Config.Update(x => x with { LastExPersonDataPath = saveFileName });
+                MessageBoxUtil.Success($"成功导出 {GetAllCharacterModels().Count} 条数据");
+            }
+            catch (Exception ex)
+            {
+                MessageBoxUtil.Exception(ex);
+            }
+        }
+
         public async Task<bool> FuncEditCharacterAsync(SanGuoCharacterViewModel characterVM, bool isNew = false)
         {
             // 读取当前头像文件
