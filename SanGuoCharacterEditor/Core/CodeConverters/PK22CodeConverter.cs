@@ -108,20 +108,15 @@ namespace SanGuoCharacterEditor.Core.CodeConverters
             return result.ToArray();
         }
 
-        /// <summary>
-        /// unicode字符串转码二进制字符串，考虑缓冲区长度，末尾添\0
-        /// </summary>
-        /// <param name="text">字符串</param>
-        /// <param name="buffer">缓冲字节数组</param>
-        public void Encode(string text, byte[] buffer)
+        public void Encode(string text, Span<byte> buffer)
         {
-            if (buffer.Length == 0)
+            if (buffer.IsEmpty)
                 return;
             byte[] data = Encode(text);
 
             int len = Math.Min(data.Length, buffer.Length - 1);
-            Array.Copy(data, buffer, len);
-            buffer[len] = 0;  // 末尾添\0
+            data.AsSpan(0, len).CopyTo(buffer);
+            buffer[len] = 0; // 末尾添 \0
         }
     }
 }

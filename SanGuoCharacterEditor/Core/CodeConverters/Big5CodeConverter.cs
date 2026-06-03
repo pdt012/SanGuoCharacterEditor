@@ -19,14 +19,12 @@ namespace SanGuoCharacterEditor.Core.CodeConverters
             return encoding.GetBytes(text);
         }
 
-        public void Encode(string text, byte[] buffer)
+        public void Encode(string text, Span<byte> buffer)
         {
             var data = Encode(text);
 
             int len = Math.Min(data.Length, buffer.Length - 1);
-
-            Array.Copy(data, buffer, len);
-
+            data.AsSpan(0, len).CopyTo(buffer);
             buffer[len] = 0;
         }
     }
