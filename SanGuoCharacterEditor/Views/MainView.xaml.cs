@@ -112,9 +112,14 @@ namespace SanGuoCharacterEditor.Views
             ViewModel.ExportExcel();
         }
 
-        private async void MenuSaveExPersonData_Click(object sender, RoutedEventArgs e)
+        private void MenuSaveExPersonData_Click(object sender, RoutedEventArgs e)
         {
-            await ViewModel.SaveExPersonData();
+            ViewModel.SaveExPersonData();
+        }
+
+        private void MenuLoadExPersonData_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.LoadExPersonData();
         }
 
         private void MenuStatistics_Click(object sender, RoutedEventArgs e)

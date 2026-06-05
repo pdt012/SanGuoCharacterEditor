@@ -65,9 +65,35 @@ namespace SanGuoCharacterEditor.Core.IOHelpers
             fs.Write(data);
         }
 
-        public static List<SanGuoCharacter> FromExPersonData(string exPersonDataPath)
+        public static unsafe List<SanGuoCharacter> FromExPersonData(string exPersonDataPath)
         {
-            return [];
+            byte[] data = File.ReadAllBytes(exPersonDataPath);
+
+            PK22ExtraPersonData exPersonData = new(0);
+            exPersonData.FromStream(new(data));
+
+            PK22CodeConverter codeConverter = new();
+            List<SanGuoCharacter> list = new();
+            for (int id = 0; id < exPersonData.count; id++)
+            {
+                ref PK22CustomPerson person = ref exPersonData.personArray[id];
+                ref CharacterInfo info = ref exPersonData.infoArray[id];
+                SanGuoCharacter character = new();
+
+                fixed (byte* pUuid = info.uuid)
+                {
+                    string uuid = codeConverter.Decode(new(pUuid, 64));
+                    var tuple = uuid.Split('@');
+                    character.PackageName = tuple[0];
+                    character.StringId = tuple[1];
+                }
+
+                CharacterPK22ScenHelper.CharacterFromPK22CustomPerson(character, in person);
+
+                list.Add(character);
+            }
+
+            return list;
         }
     }
 }

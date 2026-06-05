@@ -39,6 +39,7 @@
                 <MenuItem Header="导出到Excel" Click="MenuExportExcel_Click"/>
                 <Separator/>
                 <MenuItem Header="导出到扩展武将档" Click="MenuSaveExPersonData_Click"/>
+                <MenuItem Header="导入扩展武将档" Click="MenuLoadExPersonData_Click"/>
             </MenuItem>
             <MenuItem Header="统计" Padding="10,1">
                 <MenuItem Header="统计" Click="MenuStatistics_Click"/>

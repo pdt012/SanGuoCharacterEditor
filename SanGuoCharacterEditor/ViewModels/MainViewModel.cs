@@ -232,15 +232,39 @@ namespace SanGuoCharacterEditor.ViewModels
             }
         }
 
-        public async Task SaveExPersonData()
+        public void SaveExPersonData()
         {
-            string? saveFileName = FileDialogUtil.SaveFile("选择导出的扩展武将档文件", "s11文件|*.s11", Config.Value.LastExPersonDataPath, "ImportExcel");
+            string? saveFileName = FileDialogUtil.SaveFile("选择导出的扩展武将档文件", "s11文件|*.s11", Config.Value.LastExPersonDataPath, "SaveExPersonData");
             if (saveFileName == null) return;
             try
             {
                 CharacterExPersonDataHelper.ToExPersonData(saveFileName, GetAllCharacterModels());
                 Config.Update(x => x with { LastExPersonDataPath = saveFileName });
                 MessageBoxUtil.Success($"成功导出 {GetAllCharacterModels().Count} 条数据");
+            }
+            catch (Exception ex)
+            {
+                MessageBoxUtil.Exception(ex);
+            }
+        }
+
+        public void LoadExPersonData()
+        {
+            if (!CheckAppData()) return;
+            string? openFileName = FileDialogUtil.OpenFile("选择扩展武将档文件", "s11文件|*.s11", Config.Value.LastExPersonDataPath, "SaveExPersonData");
+            if (openFileName == null) return;
+            try
+            {
+                IEnumerable<SanGuoCharacter> characters = CharacterExPersonDataHelper.FromExPersonData(openFileName);
+                ClearCharacters();
+                int count = 0;
+                foreach (SanGuoCharacter character in characters)
+                {
+                    AddOrUpdateCharacter(character);
+                    count++;
+                }
+                Config.Update(x => x with { LastExPersonDataPath = openFileName });
+                MessageBoxUtil.Success($"成功导入 {count} 条数据");
             }
             catch (Exception ex)
             {
@@ -336,6 +360,12 @@ namespace SanGuoCharacterEditor.ViewModels
         {
             Characters.Remove(vm);
             _characterMap.Remove(vm.Id);
+        }
+
+        public void ClearCharacters()
+        {
+            Characters.Clear();
+            _characterMap.Clear();
         }
 
         public List<SanGuoCharacter> GetAllCharacterModels()

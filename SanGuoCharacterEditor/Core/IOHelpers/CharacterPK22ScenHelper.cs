@@ -27,7 +27,7 @@ namespace SanGuoCharacterEditor.Core.IOHelpers
             List<SanGuoCharacter> list = new();
             for (int id = 0; id < scenario.personArray.Length; id++)
             {
-                PK22Person person = scenario.personArray[id];
+                ref PK22Person person = ref scenario.personArray[id];
                 SanGuoCharacter character = new()
                 {
                     PackageName = "PK22",
@@ -64,7 +64,7 @@ namespace SanGuoCharacterEditor.Core.IOHelpers
             List<SanGuoCharacter> list = new();
             for (int i = 0; i < makeData.personArray.Length; i++)
             {
-                PK22CustomPerson person = makeData.personArray[i];
+                ref PK22CustomPerson person = ref makeData.personArray[i];
                 SanGuoCharacter character = new()
                 {
                     PackageName = "PK22",

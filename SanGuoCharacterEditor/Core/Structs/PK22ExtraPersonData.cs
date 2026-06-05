@@ -12,6 +12,8 @@ namespace SanGuoCharacterEditor.Core.Structs
 
         public PK22ExtraPersonData(int count)
         {
+            fileHeader.fileType = 0x08;
+
             this.count = count;
             personArray = new PK22CustomPerson[count];
             infoArray = new CharacterInfo[count];
